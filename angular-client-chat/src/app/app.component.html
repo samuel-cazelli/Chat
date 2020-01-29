@@ -1,0 +1,10 @@
+<div>
+    <input type="text" placeholder="Nick" name="nick" #nick />
+    <input type="text" placeholder="Message" name="message" #message />
+    <button type="button" (click)="handleClickSend(nick.value, message.value)">Send</button>
+</div>
+<ul>
+    <li *ngFor="let message of messages">
+        <span>{{message}}</span>
+    </li>
+</ul>
