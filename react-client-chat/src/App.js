@@ -1,8 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-import { HubConnectionBuilder } from '@aspnet/signalr';
+
+import { RealTime } from 'shared-client-chat/index';
 
 class Main extends React.Component {
 
@@ -10,43 +9,66 @@ class Main extends React.Component {
     super(props);
 
     this.state = {
-      chatHubConnection: null
+      realTime: null,
+      messages: [],
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount = () => {
-    const chatHubConnection = new HubConnectionBuilder().withUrl("https://localhost:44342/chatHub").build();
 
-    this.setState({ chatHubConnection }, () => {
-      this.state.chatHubConnection
-        .start()
-        .then(() => console.log('SignalR Started'))
+    const realTime = new RealTime();
+
+    this.setState({ realTime }, () => {
+      this.state.realTime
+        .connect()
+        .then(() => {
+          this.state.realTime.sendMessage('react', 'connected');
+        })
         .catch(err => console.log('Error connecting SignalR - ' + err));
 
-      this.state.chatHubConnection.on('ReceiveMessage', (user, message) => {
-        console.log(`${user} - ${message}`);
-      });
+      this.state
+          .realTime
+          .onNewMessage = (message) => {
+                                          let messages = this.state.messages;
+                                          messages.push(message);
+                                          this.setState({ messages: messages });
+                                        };
+
     });
   }
 
 
+  handleSubmit(event) {
+
+    this.state.realTime.sendMessage(this.refs.nick.value, this.refs.message.value);
+
+    event.preventDefault();
+  }
+
   render() {
+
+    let messagesList = (<ul>
+      {
+        this.state.messages.map((item, index) =>
+          <li key={index}>
+            <span>{item}</span>
+          </li>
+        )
+      }
+    </ul>
+    );
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-        </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            teste
-        </a>
-        </header>
+        <form onSubmit={this.handleSubmit}>
+          <div>
+            <input type="text" placeholder="Nick" name="nick" ref="nick" />
+            <input type="text" placeholder="Message" name="message" ref="message" />
+            <button type="submit">Send</button>
+          </div>
+        </form>
+        {messagesList}
       </div>
     );
   }
