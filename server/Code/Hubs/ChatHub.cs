@@ -18,16 +18,30 @@ namespace ChatServer.Code.Hubs
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            var nick = string.Empty;
+
+            Users.TryRemove(Context.ConnectionId, out nick);
+
             return base.OnDisconnectedAsync(exception);
         }
 
         private static readonly ConcurrentDictionary<string, string> Users = new ConcurrentDictionary<string, string>();
 
-        public void LogIn(string nick)
+        public KeyValuePair<bool, string> LogIn(string nick)
         {
             var connectionId = Context.ConnectionId;
 
+            var userWithSameNick = Users.Where(u => u.Value == nick);
+
+            if (userWithSameNick.Count() != 0)
+            {
+                return new KeyValuePair<bool, string>(false, "Nick is already been used.");
+            }
+
             Users.GetOrAdd(connectionId, nick);
+
+            return new KeyValuePair<bool, string>(true, string.Empty);
+
         }
 
         public async Task SendMessage(string message)

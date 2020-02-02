@@ -12,10 +12,12 @@ export class AppComponent implements OnInit {
   messages: string[];
 
   isLoggedIn: boolean;
+  errorMessageLogin: string;
 
   constructor(private realTimeService: RealTimeServiceService) {
     this.messages = [];
     this.isLoggedIn = false;
+    this.errorMessageLogin = '';
   }
 
   ngOnInit(): void {
@@ -38,8 +40,13 @@ export class AppComponent implements OnInit {
   }
 
   handleClickLogIn(nick: string) {
-    this.realTimeService.logIn(nick);
-    this.isLoggedIn = true;
+    this.realTimeService.logIn(nick).then((result) => {
+      if (result.Key) {
+        this.isLoggedIn = true;
+      } else {
+        this.errorMessageLogin = result.Value;
+      }
+    });
   }
 
 }

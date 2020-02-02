@@ -12,6 +12,7 @@ class Main extends React.Component {
       realTime: null,
       messages: [],
       isLoggedIn: false,
+      errorMessageLogin: '',
     };
     this.handleSubmitNick = this.handleSubmitNick.bind(this);
     this.handleSubmitMessage = this.handleSubmitMessage.bind(this);
@@ -42,8 +43,13 @@ class Main extends React.Component {
   }
 
   handleSubmitNick(event) {
-    this.state.realTime.logIn(this.refs.nick.value);
-    this.setState({ isLoggedIn: true });
+    this.state.realTime.logIn(this.refs.nick.value).then((result) => {
+      if (result.Key) {
+        this.setState({ isLoggedIn: true });
+      } else {
+        this.setState({ errorMessageLogin: result.Value });
+      }
+    });
     event.preventDefault();
   }
 
@@ -62,7 +68,7 @@ class Main extends React.Component {
       visibleForm = (
         <form onSubmit={this.handleSubmitMessage} id="formLogin">
           <div>
-            <label>Nick</label><br/>
+            <label>Nick</label><br />
             <input type="text" placeholder="Message" name="message" ref="message" key="message" value='hello world' />
             <button type="submit">Send Message</button>
           </div>
@@ -72,9 +78,10 @@ class Main extends React.Component {
       visibleForm = (
         <form onSubmit={this.handleSubmitNick} id="formMessage">
           <div>
-            <label>Message</label><br/>
+            <label>Message</label><br />
             <input type="text" placeholder="Nick" name="nick" ref="nick" key="nick" value='react' />
             <button type="submit">Log In</button>
+            <span>{this.state.errorMessageLogin}</span>
           </div>
         </form>
       );

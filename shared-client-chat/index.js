@@ -24,9 +24,7 @@ export class RealTime {
   }
 
   logIn(nick) {
-    this.hubConnection.invoke("LogIn", nick).catch(function (err) {
-      return console.error(err.toString());
-    });
+    return this.hubConnection.invoke("LogIn", nick)
   }
 
   sendMessage(message) {
