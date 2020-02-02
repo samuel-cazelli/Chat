@@ -13,9 +13,9 @@ export class RealTime {
 
     this.hubConnection = new HubConnectionBuilder().withUrl("https://localhost:5001/chatHub").build();
 
-    this.hubConnection.on('ReceiveMessage', (user, message) => {
+    this.hubConnection.on('NewMessage', (message) => {
       if (this.onNewMessage) {
-        this.onNewMessage(`${user} - ${message}`);
+        this.onNewMessage(`${message}`);
       }
     });
 
@@ -23,8 +23,14 @@ export class RealTime {
 
   }
 
-  sendMessage(user, message) {
-    this.hubConnection.invoke("SendMessage", user, message).catch(function (err) {
+  logIn(nick) {
+    this.hubConnection.invoke("LogIn", nick).catch(function (err) {
+      return console.error(err.toString());
+    });
+  }
+
+  sendMessage(message) {
+    this.hubConnection.invoke("SendMessage", message).catch(function (err) {
       return console.error(err.toString());
     });
   }

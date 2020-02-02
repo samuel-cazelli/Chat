@@ -11,8 +11,10 @@ class Main extends React.Component {
     this.state = {
       realTime: null,
       messages: [],
+      isLoggedIn: false,
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmitNick = this.handleSubmitNick.bind(this);
+    this.handleSubmitMessage = this.handleSubmitMessage.bind(this);
   }
 
   componentDidMount = () => {
@@ -20,56 +22,77 @@ class Main extends React.Component {
     const realTime = new RealTime();
 
     this.setState({ realTime }, () => {
+
       this.state.realTime
         .connect()
         .then(() => {
-          this.state.realTime.sendMessage('react', 'connected');
+          console.log('connected');
         })
         .catch(err => console.log('Error connecting SignalR - ' + err));
 
       this.state
-          .realTime
-          .onNewMessage = (message) => {
-                                          let messages = this.state.messages;
-                                          messages.push(message);
-                                          this.setState({ messages: messages });
-                                        };
+        .realTime
+        .onNewMessage = (message) => {
+          let messages = this.state.messages;
+          messages.push(message);
+          this.setState({ messages: messages });
+        };
 
     });
   }
 
+  handleSubmitNick(event) {
+    this.state.realTime.logIn(this.refs.nick.value);
+    this.setState({ isLoggedIn: true });
+    event.preventDefault();
+  }
 
-  handleSubmit(event) {
 
-    this.state.realTime.sendMessage(this.refs.nick.value, this.refs.message.value);
-
+  handleSubmitMessage(event) {
+    this.state.realTime.sendMessage(this.refs.message.value);
     event.preventDefault();
   }
 
   render() {
 
-    let messagesList = (<ul>
-      {
-        this.state.messages.map((item, index) =>
-          <li key={index}>
-            <span>{item}</span>
-          </li>
-        )
-      }
-    </ul>
+    let visibleForm;
+
+    //If is logged in show messages form, otherwise show login form
+    if (this.state.isLoggedIn) {
+      visibleForm = (
+        <form onSubmit={this.handleSubmitMessage} id="formLogin">
+          <div>
+            <label>Nick</label><br/>
+            <input type="text" placeholder="Message" name="message" ref="message" key="message" value='hello world' />
+            <button type="submit">Send Message</button>
+          </div>
+        </form>
+      );
+    } else {
+      visibleForm = (
+        <form onSubmit={this.handleSubmitNick} id="formMessage">
+          <div>
+            <label>Message</label><br/>
+            <input type="text" placeholder="Nick" name="nick" ref="nick" key="nick" value='react' />
+            <button type="submit">Log In</button>
+          </div>
+        </form>
+      );
+    }
+
+    let messagesList = (
+      <ul>
+        {this.state.messages.map((message, index) =>
+          <li key={index}>{message}</li>)
+        }
+      </ul>
     );
 
     return (
-      <div className="App">
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <input type="text" placeholder="Nick" name="nick" ref="nick" />
-            <input type="text" placeholder="Message" name="message" ref="message" />
-            <button type="submit">Send</button>
-          </div>
-        </form>
+      <React.Fragment>
+        {visibleForm}
         {messagesList}
-      </div>
+      </React.Fragment>
     );
   }
 }

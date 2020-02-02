@@ -11,8 +11,11 @@ export class AppComponent implements OnInit {
 
   messages: string[];
 
+  isLoggedIn: boolean;
+
   constructor(private realTimeService: RealTimeServiceService) {
     this.messages = [];
+    this.isLoggedIn = false;
   }
 
   ngOnInit(): void {
@@ -20,7 +23,6 @@ export class AppComponent implements OnInit {
     this.realTimeService.connect()
       .then(() => {
         console.log('Connection started!');
-        this.realTimeService.sendMessage('angular', 'connected');
       })
       .catch(err => console.log('Error while establishing connection :('));
 
@@ -31,8 +33,13 @@ export class AppComponent implements OnInit {
 
   }
 
-  handleClickSend(nick: string, message: string) {
-    this.realTimeService.sendMessage(nick, message);
+  handleClickSendMessage(message: string) {
+    this.realTimeService.sendMessage(message);
+  }
+
+  handleClickLogIn(nick: string) {
+    this.realTimeService.logIn(nick);
+    this.isLoggedIn = true;
   }
 
 }
