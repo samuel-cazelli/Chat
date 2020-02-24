@@ -4,13 +4,20 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using ChatServer.Code.Db;
+using ChatServer.Code.Db.Models;
 
 namespace ChatServer.Code.Hubs
 {
     public class ChatHub : Hub
     {
 
+        public ChatDbContext ChatDbContext { get; set; }
 
+        public ChatHub(ChatDbContext dbContext)
+        {
+            this.ChatDbContext = dbContext;
+        }
 
         public override Task OnConnectedAsync()
         {
@@ -51,8 +58,21 @@ namespace ChatServer.Code.Hubs
 
             if (Users.TryGetValue(connectionId, out nick))
             {
+                ChatDbContext.Add(new Message() { Nick = nick, Content = message, Date = DateTime.Now });
+                ChatDbContext.SaveChanges();
+
                 await Clients.All.SendAsync("NewMessage", $"@{nick} says: {message}");
             }
+        }
+
+        public List<Message> GetMessages(long startId = 0)
+        {
+            if (startId == 0)
+                startId = long.MaxValue;
+
+            var messages = ChatDbContext.Messages.Where(m => m.Id < startId).OrderByDescending(m => m.Id).Take(10).ToList();
+
+            return messages.OrderBy(m => m.Id).ToList();
         }
     }
 
