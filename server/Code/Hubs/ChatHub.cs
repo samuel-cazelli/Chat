@@ -58,10 +58,12 @@ namespace ChatServer.Code.Hubs
 
             if (Users.TryGetValue(connectionId, out nick))
             {
-                ChatDbContext.Add(new Message() { Nick = nick, Content = message, Date = DateTime.Now });
+                var messageObj = new Message() { Nick = nick, Content = message, Date = DateTime.Now };
+
+                ChatDbContext.Add(messageObj);
                 ChatDbContext.SaveChanges();
 
-                await Clients.All.SendAsync("NewMessage", $"@{nick} says: {message}");
+                await Clients.All.SendAsync("NewMessage", messageObj);
             }
         }
 
@@ -74,6 +76,7 @@ namespace ChatServer.Code.Hubs
 
             return messages.OrderBy(m => m.Id).ToList();
         }
+
     }
 
 }

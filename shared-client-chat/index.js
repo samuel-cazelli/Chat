@@ -15,7 +15,7 @@ export class RealTime {
 
     this.hubConnection.on('NewMessage', (message) => {
       if (this.onNewMessage) {
-        this.onNewMessage(`${message}`);
+        this.onNewMessage(message);
       }
     });
 
@@ -31,6 +31,10 @@ export class RealTime {
     this.hubConnection.invoke("SendMessage", message).catch(function (err) {
       return console.error(err.toString());
     });
+  }
+
+  getMessages(startId) {
+    return this.hubConnection.invoke("GetMessages", startId)
   }
 
 }
