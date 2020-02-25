@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
 import { RealTimeServiceService } from './services/real-time-service.service';
+
+import { LoginComponent } from './components/login/login.component';
+import { MessagesComponent } from './components/messages/messages.component';
+
+
 
 @Component({
   selector: 'app-root',
@@ -9,15 +14,13 @@ import { RealTimeServiceService } from './services/real-time-service.service';
 })
 export class AppComponent implements OnInit {
 
-  messages: string[];
+  @ViewChild(MessagesComponent, { static: true })
+  messagesElement: MessagesComponent;
 
   isLoggedIn: boolean;
-  errorMessageLogin: string;
 
   constructor(private realTimeService: RealTimeServiceService) {
-    this.messages = [];
     this.isLoggedIn = false;
-    this.errorMessageLogin = '';
   }
 
   ngOnInit(): void {
@@ -30,23 +33,12 @@ export class AppComponent implements OnInit {
 
     this.realTimeService
       .onNewMessage = (message) => {
-        this.messages.push(message);
+        this.messagesElement.newMessage(message);
       };
-
   }
 
-  handleClickSendMessage(message: string) {
-    this.realTimeService.sendMessage(message);
+  handleLoginSuccess() {
+    this.isLoggedIn = true;
+    this.messagesElement.loadMessages();
   }
-
-  handleClickLogIn(nick: string) {
-    this.realTimeService.logIn(nick).then((result) => {
-      if (result.Key) {
-        this.isLoggedIn = true;
-      } else {
-        this.errorMessageLogin = result.Value;
-      }
-    });
-  }
-
 }

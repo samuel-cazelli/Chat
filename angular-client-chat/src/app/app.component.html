@@ -1,17 +1,5 @@
 
-<div [hidden]='isLoggedIn'>
-    <label>Nick</label><br />
-    <input type="text" value="angular" name="nick" #nick />
-    <button type="button" (click)="handleClickLogIn(nick.value)">LogIn</button>
-    <span>{{errorMessageLogin}}</span>
-</div>
-<div [hidden]='!isLoggedIn'>
-    <label>Message</label><br />
-    <input type="text" value="hello world" name="message" #message />
-    <button type="button" (click)="handleClickSendMessage(message.value)">Send</button>
-</div>
-<ul>
-    <li *ngFor="let message of messages">
-        <span>{{message}}</span>
-    </li>
-</ul>
+<app-login [hidden]='isLoggedIn' [realTimeService]="realTimeService" (onLoginSuccess)="handleLoginSuccess()" ></app-login>
+
+<app-messages #messagesElement [hidden]='!isLoggedIn' [realTimeService]="realTimeService" ></app-messages>
+

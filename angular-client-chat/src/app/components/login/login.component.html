@@ -1,0 +1,6 @@
+<div>
+  <label>Nick</label><br />
+  <input type="text" value="angular" name="nick" #nick />
+  <button type="button" (click)="handleClickLogIn(nick.value)">LogIn</button>
+  <span>{{errorMessageLogin}}</span>
+</div>

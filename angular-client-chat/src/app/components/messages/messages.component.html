@@ -1,0 +1,10 @@
+<div class="messages" #messagesElement infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+    (scrolledUp)="scrolledUp()" [scrollWindow]="false"
+    (change)="messagesChanged()">
+    <div *ngFor="let message of messages">{{message.nick}} says {{message.content}}</div>
+</div>
+<div>
+    <label>Message</label><br />
+    <input type="text" value="hello world" name="message" #message />
+    <button type="button" (click)="handleClickSendMessage(message.value)">Send</button>
+</div>
