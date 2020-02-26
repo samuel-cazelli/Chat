@@ -1,4 +1,9 @@
-import { NEW_MESSAGE_RECEIVED, SEND_MESSAGE } from '../actions/MessagesAction';
+import { 
+    NEW_MESSAGE_RECEIVED, 
+    SEND_MESSAGE,
+    LOAD_INITIAL_MESSAGES_REQUEST,
+    LOAD_INITIAL_MESSAGES_SUCCESS
+ } from '../actions/MessagesAction';
 
 const initialState = {
     messagesHistory: '',
@@ -16,6 +21,15 @@ export const messagesReducer = (state = initialState, action) => {
 
 
         case SEND_MESSAGE: return state;
+
+        case LOAD_INITIAL_MESSAGES_REQUEST: return state;
+
+        case LOAD_INITIAL_MESSAGES_SUCCESS:
+            return {
+                ...state,
+                messagesHistory: action.messages
+            }
+
 
         default: return state;
 
