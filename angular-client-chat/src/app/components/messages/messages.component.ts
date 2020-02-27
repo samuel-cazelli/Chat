@@ -27,7 +27,11 @@ export class MessagesComponent implements OnInit {
   }
 
   scrolledUp() {
-    console.log('scrolled!!');
+    this.realTimeService.getMessages(this.messages[0].id)
+      .then((response) => {
+        this.messages = response.concat(this.messages);
+      });
+    console.log(this.messages);
   }
 
   loadMessages() {
@@ -38,7 +42,7 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-  newMessage(message){
+  newMessage(message) {
     this.messages.push(message);
     this.moveChatToEnd();
   }

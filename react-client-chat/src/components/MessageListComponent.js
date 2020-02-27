@@ -3,22 +3,23 @@ import { connect } from 'react-redux';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
-import { loadInitialMessagesRequest } from '../redux/actions/MessagesAction';
+import { loadMessagesRequest } from '../redux/actions/MessagesAction';
 
 
 
 class MessageListComponent extends React.Component {
 
     loadMoreMessages() {
-        console.log('load more');
+        console.log(this.props.messagesHistory);
+        this.props.dispatch(loadMessagesRequest(this.props.messagesHistory[0].id));
     }
 
     componentDidUpdate() {
-        const messagesElement = document.querySelector(".messages");
+        /*const messagesElement = document.querySelector(".messages");
         if(messagesElement) {
             const scrollSize = messagesElement.scrollHeight;
             messagesElement.scrollTo(0, scrollSize);
-        }
+        }*/
     }
 
     render() {
@@ -45,11 +46,6 @@ class MessageListComponent extends React.Component {
                         }
                     </InfiniteScroll>
                 </div>
-                <ul>
-                    {this.props.messagesHistory && this.props.messagesHistory.map((message, index) =>
-                        <li key={index}>{message.nick} says: {message.content}</li>)
-                    }
-                </ul>
             </React.Fragment>
         );
     }

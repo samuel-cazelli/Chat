@@ -20,8 +20,8 @@ class Main extends React.Component {
     return (
       <React.Fragment>
         <LoginComponent></LoginComponent>
-        <MessageFormComponent></MessageFormComponent>
         <MessageListComponent></MessageListComponent>
+        <MessageFormComponent></MessageFormComponent>
       </React.Fragment>
     );
   }

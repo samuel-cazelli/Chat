@@ -1,4 +1,4 @@
-import { loadInitialMessagesRequest } from './MessagesAction';
+import { loadMessagesRequest } from './MessagesAction';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -14,7 +14,7 @@ export const loginRequest = (nick) => {
         getState().connection.realTime.logIn(nick).then((result) => {
             if (result.Key) {
                 dispatch(loginSuccess());
-                dispatch(loadInitialMessagesRequest());
+                dispatch(loadMessagesRequest(0));
             } else {
                 dispatch(loginError(result.Value));
             }

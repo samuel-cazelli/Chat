@@ -1,12 +1,12 @@
 import { 
     NEW_MESSAGE_RECEIVED, 
     SEND_MESSAGE,
-    LOAD_INITIAL_MESSAGES_REQUEST,
-    LOAD_INITIAL_MESSAGES_SUCCESS
+    LOAD_MESSAGES_REQUEST,
+    LOAD_MESSAGES_SUCCESS
  } from '../actions/MessagesAction';
 
 const initialState = {
-    messagesHistory: '',
+    messagesHistory: [],
 }
 
 export const messagesReducer = (state = initialState, action) => {
@@ -22,12 +22,12 @@ export const messagesReducer = (state = initialState, action) => {
 
         case SEND_MESSAGE: return state;
 
-        case LOAD_INITIAL_MESSAGES_REQUEST: return state;
+        case LOAD_MESSAGES_REQUEST: return state;
 
-        case LOAD_INITIAL_MESSAGES_SUCCESS:
+        case LOAD_MESSAGES_SUCCESS:
             return {
                 ...state,
-                messagesHistory: action.messages
+                messagesHistory: action.messages.concat(state.messagesHistory)
             }
 
 
