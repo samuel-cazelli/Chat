@@ -30,8 +30,7 @@ class MessageListComponent extends React.Component {
         }
 
         return (
-            <React.Fragment>
-                <div style={{ height: '150px', width: '400px', 'overflow': 'auto' }} className='messages'>
+                <div className='messages'>
                     <InfiniteScroll
                         pageStart={0}
                         loadMore={this.loadMoreMessages.bind(this)}
@@ -42,11 +41,13 @@ class MessageListComponent extends React.Component {
                         threshold={10}
                     >
                         {this.props.messagesHistory && this.props.messagesHistory.map((message, index) =>
-                            <div key={index}>{message.nick} says: {message.content}</div>)
-                        }
+                            <div className="message" key={index}>
+                                <span className="message-nick">{message.nick}</span><br />
+                                <span className="message-content">{message.content}</span>
+                            </div>
+                        )}
                     </InfiniteScroll>
                 </div>
-            </React.Fragment>
         );
     }
 }

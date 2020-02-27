@@ -1,6 +1,17 @@
-<div>
-  <label>Nick</label><br />
-  <input type="text" value="angular" name="nick" #nick />
-  <button type="button" (click)="handleClickLogIn(nick.value)">LogIn</button>
-  <span>{{errorMessageLogin}}</span>
+<div class="row">
+  <div class="col-md-offset-4 col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Log In</div>
+      <div class="panel-body">
+        <div class="alert alert-danger" role="alert" [hidden]="!errorMessageLogin">{{errorMessageLogin}}</div>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Nick" value="angular" name="nick" #nick (keyup.enter)="handleClickLogIn(nick.value)">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" (click)="handleClickLogIn(nick.value)">
+              <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -72,7 +72,7 @@ namespace ChatServer.Code.Hubs
             if (startId == 0)
                 startId = long.MaxValue;
 
-            var messages = ChatDbContext.Messages.Where(m => m.Id < startId).OrderByDescending(m => m.Id).Take(10).ToList();
+            var messages = ChatDbContext.Messages.Where(m => m.Id < startId).OrderByDescending(m => m.Id).Take(20).ToList();
 
             return messages.OrderBy(m => m.Id).ToList();
         }

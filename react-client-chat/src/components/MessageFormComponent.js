@@ -24,10 +24,13 @@ class MessageFormComponent extends React.Component {
 
         return (
             <form onSubmit={this.handleSubmitMessage} id="formLogin">
-                <div>
-                    <label>Message</label><br />
-                    <input type="text" placeholder="Message" name="message" ref="message" key="message" defaultValue='hello world' />
-                    <button type="submit">Send Message</button>
+                <div className="input-group">
+                    <input type="text" className="form-control" placeholder="Message" name="message" ref="message" key="message" defaultValue='hello world' />
+                    <span className="input-group-btn">
+                        <button className="btn btn-default" type="submit">
+                            <span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                        </button>
+                    </span>
                 </div>
             </form>
         );

@@ -22,16 +22,27 @@ class LoginComponent extends React.Component {
         }
 
         return (
-            <React.Fragment>
-                <form onSubmit={this.handleSubmitNick} id="formMessage">
-                    <div>
-                        <label>Nick</label><br />
-                        <input type="text" placeholder="Nick" name="nick" ref="nick" key="nick" defaultValue='react' />
-                        <button type="submit">Log In</button>
-                        <span>{this.props.errorMessageLogin}</span>
+            <div className="row">
+                <div className="col-md-offset-4 col-md-4">
+                    <div className="panel panel-primary">
+                        <div className="panel-heading">Log In</div>
+                        <div className="panel-body">
+                            {this.props.errorMessageLogin && (<div className="alert alert-danger" role="alert" >{this.props.errorMessageLogin}</div>)}
+                            <form onSubmit={this.handleSubmitNick} id="formMessage">
+                                <div className="input-group">
+                                    <input type="text" className="form-control" placeholder="Nick" name="nick" ref="nick" key="nick" defaultValue='react' />
+                                    <span className="input-group-btn">
+                                        <button className="btn btn-default" type="submit" >
+                                            <span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
-            </React.Fragment>
+                </div>
+            </div>
+
         );
     }
 
