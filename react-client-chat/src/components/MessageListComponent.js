@@ -10,7 +10,6 @@ import { loadMessagesRequest } from '../redux/actions/MessagesAction';
 class MessageListComponent extends React.Component {
 
     loadMoreMessages() {
-        console.log(this.props.messagesHistory);
         this.props.dispatch(loadMessagesRequest(this.props.messagesHistory[0].id));
     }
 
@@ -22,6 +21,28 @@ class MessageListComponent extends React.Component {
         }*/
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.messagesHistory.length === 0) {
+            this.scrollChatToEnd(true);
+        } else if (nextProps.messagesHistory.length > this.props.messagesHistory.length) {
+            this.scrollChatToEnd(false);
+        }
+    }
+
+    scrollChatToEnd(force) {
+        setTimeout(() => {
+            const messagesElement = document.querySelector(".messages");
+            const scrollSize = messagesElement.scrollHeight;
+            const currentScrollPosition = messagesElement.scrollTop;
+            const divSize = messagesElement.clientHeight;
+
+            // if it's at the end of chat scroll to show new message
+            if (force || (currentScrollPosition + divSize - scrollSize) > -100) {
+                messagesElement.scrollTo(0, scrollSize);
+            }
+        }, 50);
+    }
+
     render() {
 
         //if itsn't logged hide form
@@ -30,24 +51,24 @@ class MessageListComponent extends React.Component {
         }
 
         return (
-                <div className='messages'>
-                    <InfiniteScroll
-                        pageStart={0}
-                        loadMore={this.loadMoreMessages.bind(this)}
-                        hasMore={true}
-                        isReverse={true}
-                        useWindow={false}
-                        initialLoad={false}
-                        threshold={10}
-                    >
-                        {this.props.messagesHistory && this.props.messagesHistory.map((message, index) =>
-                            <div className="message" key={index}>
-                                <span className="message-nick">{message.nick}</span><br />
-                                <span className="message-content">{message.content}</span>
-                            </div>
-                        )}
-                    </InfiniteScroll>
-                </div>
+            <div className='messages'>
+                <InfiniteScroll
+                    pageStart={0}
+                    loadMore={this.loadMoreMessages.bind(this)}
+                    hasMore={true}
+                    isReverse={true}
+                    useWindow={false}
+                    initialLoad={false}
+                    threshold={10}
+                >
+                    {this.props.messagesHistory && this.props.messagesHistory.map((message, index) =>
+                        <div className="message" key={index}>
+                            <span className="message-nick">{message.nick}</span><br />
+                            <span className="message-content">{message.content}</span>
+                        </div>
+                    )}
+                </InfiniteScroll>
+            </div>
         );
     }
 }

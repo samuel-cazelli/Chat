@@ -38,20 +38,26 @@ export class MessagesComponent implements OnInit {
     this.realTimeService.getMessages(0)
       .then((response) => {
         this.messages = response;
-        this.moveChatToEnd();
+        this.scrollChatToEnd(true);
       });
   }
 
   newMessage(message) {
     this.messages.push(message);
-    this.moveChatToEnd();
+    this.scrollChatToEnd(false);
   }
 
-  moveChatToEnd() {
+  scrollChatToEnd(force) {
     setTimeout(() => {
       const scrollSize = this.messagesElement.nativeElement.scrollHeight;
-      this.messagesElement.nativeElement.scrollTo(0, scrollSize);
-    }, 200);
+      const currentScrollPosition = this.messagesElement.nativeElement.scrollTop;
+      const divSize = this.messagesElement.nativeElement.clientHeight;
+
+      // if it's at the end of chat scroll to show new message
+      if (force || (currentScrollPosition + divSize - scrollSize) > -100) {
+        this.messagesElement.nativeElement.scrollTo(0, scrollSize);
+      }
+    }, 50);
   }
 
 }
