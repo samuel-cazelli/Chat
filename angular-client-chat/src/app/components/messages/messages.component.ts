@@ -12,7 +12,7 @@ export class MessagesComponent implements OnInit {
   @ViewChild('messagesElement', { static: true })
   messagesElement: ElementRef;
 
-  messages: { id: BigInteger, content: string, nick: string, date: Date }[];
+  messages: { id: BigInteger, content: string, nick: string, date: Date, isMessageMine: boolean }[];
 
   @Input()
   realTimeService: RealTimeServiceService;
@@ -26,12 +26,11 @@ export class MessagesComponent implements OnInit {
     this.realTimeService.sendMessage(message);
   }
 
-  scrolledUp() {
+  handleScrolledUp() {
     this.realTimeService.getMessages(this.messages[0].id)
       .then((response) => {
         this.messages = response.concat(this.messages);
       });
-    console.log(this.messages);
   }
 
   loadMessages() {

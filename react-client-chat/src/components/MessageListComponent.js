@@ -62,7 +62,7 @@ class MessageListComponent extends React.Component {
                     threshold={10}
                 >
                     {this.props.messagesHistory && this.props.messagesHistory.map((message, index) =>
-                        <div className="message" key={index}>
+                        <div className={'message ' + (message.isMessageMine ? "isMessageMine" : "")} key={index}>
                             <span className="message-nick">{message.nick}</span><br />
                             <span className="message-content">{message.content}</span>
                         </div>

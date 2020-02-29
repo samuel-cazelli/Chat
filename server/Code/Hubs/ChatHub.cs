@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChatServer.Code.Db;
 using ChatServer.Code.Db.Models;
+using ChatServer.Models;
 
 namespace ChatServer.Code.Hubs
 {
@@ -31,6 +32,8 @@ namespace ChatServer.Code.Hubs
 
             return base.OnDisconnectedAsync(exception);
         }
+
+
 
         private static readonly ConcurrentDictionary<string, string> Users = new ConcurrentDictionary<string, string>();
 
@@ -63,18 +66,27 @@ namespace ChatServer.Code.Hubs
                 ChatDbContext.Add(messageObj);
                 ChatDbContext.SaveChanges();
 
-                await Clients.All.SendAsync("NewMessage", messageObj);
+                await Clients.All.SendAsync("NewMessage", new MessageModel(messageObj, nick));
             }
         }
 
-        public List<Message> GetMessages(long startId = 0)
+        public List<MessageModel> GetMessages(long startId = 0)
         {
             if (startId == 0)
                 startId = long.MaxValue;
 
-            var messages = ChatDbContext.Messages.Where(m => m.Id < startId).OrderByDescending(m => m.Id).Take(20).ToList();
+            var messagesDb = ChatDbContext.Messages
+                .Where(m => m.Id < startId)
+                .OrderByDescending(m => m.Id)
+                .Take(20)
+                .ToList()
+                .OrderBy(m => m.Id)
+                .ToList();
 
-            return messages.OrderBy(m => m.Id).ToList();
+            var nick = string.Empty;
+            Users.TryGetValue(Context.ConnectionId, out nick);
+
+            return messagesDb.Select(m => new MessageModel(m, nick)).ToList();
         }
 
     }
