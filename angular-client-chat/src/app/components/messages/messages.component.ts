@@ -17,9 +17,17 @@ export class MessagesComponent implements OnInit {
   @Input()
   realTimeService: RealTimeServiceService;
 
-  constructor() { }
+  constructor() {
+    
+  }
 
   ngOnInit() {
+    this.realTimeService.subscribeOnNewMessageEvent('MessagesComponent',  this.handlerOnNewMessage.bind(this));
+  }
+
+  handlerOnNewMessage(message) {
+    this.messages.push(message);
+    this.scrollChatToEnd(false);
   }
 
   handleClickSendMessage(message: string) {
@@ -39,11 +47,6 @@ export class MessagesComponent implements OnInit {
         this.messages = response;
         this.scrollChatToEnd(true);
       });
-  }
-
-  newMessage(message) {
-    this.messages.push(message);
-    this.scrollChatToEnd(false);
   }
 
   scrollChatToEnd(force) {

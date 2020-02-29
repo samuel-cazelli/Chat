@@ -31,14 +31,11 @@ export class AppComponent implements OnInit {
       })
       .catch(err => console.log('Error while establishing connection :('));
 
-    this.realTimeService
-      .onNewMessage = (message) => {
-        this.messagesElement.newMessage(message);
-      };
   }
 
   handleLoginSuccess() {
     this.isLoggedIn = true;
     this.messagesElement.loadMessages();
   }
+
 }

@@ -15,9 +15,15 @@ export const connectionRequest = (nick) => {
             .then(() => {
                 dispatch(connectionSuccess());
 
-                getState().connection.realTime.onNewMessage = (message) => {
-                    dispatch(newMessageReceived(message));
-                };
+                getState()
+                    .connection
+                    .realTime
+                    .subscribeOnNewMessageEvent(
+                        'onNewMessageReceived',
+                        (message) => {
+                            dispatch(newMessageReceived(message));
+                        });
+
             })
             .catch((err) => {
                 dispatch(connectionError(err));

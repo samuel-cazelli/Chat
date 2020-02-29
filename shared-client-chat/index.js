@@ -7,6 +7,7 @@ export class RealTime {
 
   constructor() {
     this.hubConnection = undefined;
+    this.handlersNewMessage = [];
   }
 
   connect() {
@@ -14,9 +15,9 @@ export class RealTime {
     this.hubConnection = new HubConnectionBuilder().withUrl("https://localhost:5001/chatHub").build();
 
     this.hubConnection.on('NewMessage', (message) => {
-      if (this.onNewMessage) {
-        this.onNewMessage(message);
-      }
+      this.handlersNewMessage.forEach(function (item, index) {
+        item.handler(message);
+      });
     });
 
     return this.hubConnection.start();
@@ -36,6 +37,17 @@ export class RealTime {
   getMessages(startId) {
     return this.hubConnection.invoke("GetMessages", startId)
   }
+
+  subscribeOnNewMessageEvent(name, handlerNewMessage) {
+    this.handlersNewMessage.push({ name: name, handler: handlerNewMessage });
+  }
+
+  unSubscribeOnNewMessageEvent(name) {
+    this.handlersNewMessage = this.handlersNewMessage.filter(function (value, index, arr) {
+      return value.name === name;
+    });
+  }
+
 
 }
 
