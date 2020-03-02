@@ -2,6 +2,7 @@ export const NEW_MESSAGE_RECEIVED = 'MESSAGE_RECEIVED';
 export const SEND_MESSAGE = 'MESSAGE_SEND';
 export const LOAD_MESSAGES_REQUEST = 'LOAD_MESSAGES_REQUEST';
 export const LOAD_MESSAGES_SUCCESS = 'LOAD_MESSAGES_SUCCESS';
+export const CHANGE_NUMBER_OF_UNREAD_MESSAGES = 'CHANGE_NUMBER_OF_UNREAD_MESSAGES';
 
 export const newMessageReceived = (message) => {
     return {
@@ -38,6 +39,13 @@ export const loadMessagesSuccess = (messages) => {
     return {
         type: LOAD_MESSAGES_SUCCESS,
         messages: messages
+    };
+}
+
+export const changeNumberOfUnreadMessages  = (numberOfUnreadMessages) => {
+    return {
+        type: CHANGE_NUMBER_OF_UNREAD_MESSAGES,
+        numberOfUnreadMessages: numberOfUnreadMessages
     };
 }
 

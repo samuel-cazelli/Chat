@@ -31,3 +31,12 @@
   font-size: 12px;
   color: #337ab7;
 }
+
+.messages .buttonMoveToBotton{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 22%;
+  right: 8%
+}

@@ -1,12 +1,19 @@
 <div class="row">
     <div class="col-md-offset-3 col-md-6">
         <div class="panel panel-primary">
-            <div class="messages" #messagesElement infiniteScroll [infiniteScrollDistance]="2"
-                [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolledUp)="handleScrolledUp()"
-                (change)="messagesChanged()">
-                <div *ngFor="let message of messages" [ngClass]="{message: true, isMessageMine: message.isMessageMine}">
-                    <span class="message-nick">{{message.nick}}</span><br><span
-                        class="message-content">{{message.content}}</span>
+            <div>
+                <div class="messages" #messagesElement infiniteScroll [infiniteScrollDistance]="2"
+                    [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolledUp)="handleScrolledUp()">
+                    <div *ngFor="let message of messages"
+                        [ngClass]="{message: true, isMessageMine: message.isMessageMine}">
+                        <span class="message-nick">{{message.nick}}</span><br><span
+                            class="message-content">{{message.content}}</span>
+                    </div>
+                    <button class="buttonMoveToBotton btn btn-default" *ngIf='numberOfUnreadMessages !== 0'
+                        (click)="scrollChatToEnd(true)">
+                        <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                        <span class="badge badge-pill badge-primary">{{numberOfUnreadMessages}}</span>
+                    </button>
                 </div>
             </div>
             <div class="panel-footer">
@@ -15,7 +22,8 @@
                         (keyup.enter)="handleClickSendMessage(message.value)" />
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" (click)="handleClickSendMessage(message.value)">
-                            <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>
+                            <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                        </button>
                     </span>
                 </div>
             </div>

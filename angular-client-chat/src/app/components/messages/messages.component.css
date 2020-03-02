@@ -7,6 +7,18 @@
     display: grid;
   }
 
+  .messages .isMessageMine{
+    justify-self: end;
+  }
+
+  .messages .buttonMoveToBotton{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 22%;
+    right: 8%
+  }
 
   .message{
     padding: 0 5px;
@@ -21,9 +33,7 @@
     justify-self: start;
   }
 
-  .messages .isMessageMine{
-    justify-self: end;
-  }
+
 
   .message-nick{
     font-weight: bold;

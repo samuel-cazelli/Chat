@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
-import { loadMessagesRequest } from '../redux/actions/MessagesAction';
+import { loadMessagesRequest, changeNumberOfUnreadMessages } from '../redux/actions/MessagesAction';
 
 
 
@@ -13,23 +13,20 @@ class MessageListComponent extends React.Component {
         this.props.dispatch(loadMessagesRequest(this.props.messagesHistory[0].id));
     }
 
-    componentDidUpdate() {
-        /*const messagesElement = document.querySelector(".messages");
-        if(messagesElement) {
-            const scrollSize = messagesElement.scrollHeight;
-            messagesElement.scrollTo(0, scrollSize);
-        }*/
-    }
-
     componentWillReceiveProps(nextProps) {
         if (this.props.messagesHistory.length === 0) {
-            this.scrollChatToEnd(true);
+            this.scrollChatToEnd(true, true);
         } else if (nextProps.messagesHistory.length > this.props.messagesHistory.length) {
-            this.scrollChatToEnd(false);
+       
+            const lastIdNewMessages = Number.parseInt(nextProps.messagesHistory[nextProps.messagesHistory.length - 1].id);
+            const lastIdOldMessages = Number.parseInt(this.props.messagesHistory[this.props.messagesHistory.length - 1].id);
+            const isNewMessage = lastIdNewMessages !== lastIdOldMessages;
+
+            this.scrollChatToEnd(false, isNewMessage);
         }
     }
 
-    scrollChatToEnd(force) {
+    scrollChatToEnd(force, isNewMessage) {
         setTimeout(() => {
             const messagesElement = document.querySelector(".messages");
             const scrollSize = messagesElement.scrollHeight;
@@ -39,6 +36,10 @@ class MessageListComponent extends React.Component {
             // if it's at the end of chat scroll to show new message
             if (force || (currentScrollPosition + divSize - scrollSize) > -100) {
                 messagesElement.scrollTo(0, scrollSize);
+                this.props.dispatch(changeNumberOfUnreadMessages(0));
+                console.log('foi');
+            } else if (isNewMessage) {
+                this.props.dispatch(changeNumberOfUnreadMessages(this.props.numberOfUnreadMessages + 1));
             }
         }, 50);
     }
@@ -68,6 +69,14 @@ class MessageListComponent extends React.Component {
                         </div>
                     )}
                 </InfiniteScroll>
+                {(this.props.numberOfUnreadMessages !== 0) ?
+                    (
+                        <button className="buttonMoveToBotton btn btn-default" onClick={() => { this.scrollChatToEnd(true, false) }} >
+                            <span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                            <span className="badge badge-pill badge-primary">{this.props.numberOfUnreadMessages}</span>
+                        </button>
+                    ) : ""
+                }
             </div>
         );
     }
@@ -77,6 +86,7 @@ const mapStateProps = (state) => {
     return {
         isLoggedIn: state.login.isLoggedIn,
         messagesHistory: state.messages.messagesHistory,
+        numberOfUnreadMessages: state.messages.numberOfUnreadMessages
     }
 }
 

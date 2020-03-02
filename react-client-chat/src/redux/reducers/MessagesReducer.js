@@ -1,12 +1,14 @@
-import { 
-    NEW_MESSAGE_RECEIVED, 
+import {
+    NEW_MESSAGE_RECEIVED,
     SEND_MESSAGE,
     LOAD_MESSAGES_REQUEST,
-    LOAD_MESSAGES_SUCCESS
- } from '../actions/MessagesAction';
+    LOAD_MESSAGES_SUCCESS,
+    CHANGE_NUMBER_OF_UNREAD_MESSAGES
+} from '../actions/MessagesAction';
 
 const initialState = {
     messagesHistory: [],
+    numberOfUnreadMessages: 0
 }
 
 export const messagesReducer = (state = initialState, action) => {
@@ -28,6 +30,12 @@ export const messagesReducer = (state = initialState, action) => {
             return {
                 ...state,
                 messagesHistory: action.messages.concat(state.messagesHistory)
+            }
+
+        case CHANGE_NUMBER_OF_UNREAD_MESSAGES:
+            return {
+                ...state,
+                numberOfUnreadMessages: action.numberOfUnreadMessages
             }
 
 

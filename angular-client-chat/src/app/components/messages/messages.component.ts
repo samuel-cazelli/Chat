@@ -14,15 +14,17 @@ export class MessagesComponent implements OnInit {
 
   messages: { id: BigInteger, content: string, nick: string, date: Date, isMessageMine: boolean }[];
 
+  numberOfUnreadMessages: number;
+
   @Input()
   realTimeService: RealTimeServiceService;
 
   constructor() {
-    
+    this.numberOfUnreadMessages = 0;
   }
 
   ngOnInit() {
-    this.realTimeService.subscribeOnNewMessageEvent('MessagesComponent',  this.handlerOnNewMessage.bind(this));
+    this.realTimeService.subscribeOnNewMessageEvent('MessagesComponent', this.handlerOnNewMessage.bind(this));
   }
 
   handlerOnNewMessage(message) {
@@ -58,6 +60,9 @@ export class MessagesComponent implements OnInit {
       // if it's at the end of chat scroll to show new message
       if (force || (currentScrollPosition + divSize - scrollSize) > -100) {
         this.messagesElement.nativeElement.scrollTo(0, scrollSize);
+        this.numberOfUnreadMessages = 0;
+      } else {
+        this.numberOfUnreadMessages += 1;
       }
     }, 50);
   }
