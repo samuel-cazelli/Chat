@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   isLoggedIn: boolean;
 
-  constructor(private realTimeService: RealTimeServiceService) {
+  constructor(public realTimeService: RealTimeServiceService) {
     this.isLoggedIn = false;
   }
 
