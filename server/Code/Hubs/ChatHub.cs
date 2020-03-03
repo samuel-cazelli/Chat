@@ -66,7 +66,8 @@ namespace ChatServer.Code.Hubs
                 ChatDbContext.Add(messageObj);
                 ChatDbContext.SaveChanges();
 
-                await Clients.All.SendAsync("NewMessage", new MessageModel(messageObj, nick));
+                await Clients.AllExcept(connectionId).SendAsync("NewMessage", new MessageModel(messageObj, string.Empty));
+                await Clients.Client(connectionId).SendAsync("NewMessage", new MessageModel(messageObj, nick));
             }
         }
 
