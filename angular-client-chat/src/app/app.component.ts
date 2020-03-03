@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
 
   handleLoginSuccess() {
     this.isLoggedIn = true;
-    this.messagesElement.loadMessages();
+    this.messagesElement.loadInitialMessages();
   }
 
 }

@@ -24,16 +24,27 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.realTimeService.subscribeOnNewMessageEvent('MessagesComponent', this.handlerOnNewMessage.bind(this));
+    this.realTimeService.subscribeOnNewMessageEvent('MessagesComponent', this.handleOnNewMessage.bind(this));
   }
 
-  handlerOnNewMessage(message) {
+  handleOnNewMessage(message) {
     this.messages.push(message);
-    this.scrollChatToEnd(false);
+    this.scrollChatToBottom(false);
+
+    if (!this.isChatScrolledToBottom()) {
+      this.numberOfUnreadMessages += 1;
+    }
+
   }
 
   handleClickSendMessage(message: string) {
     this.realTimeService.sendMessage(message);
+  }
+
+  handleScrolledDown() {
+    if (this.isChatScrolledToBottom()) {
+      this.numberOfUnreadMessages = 0;
+    }
   }
 
   handleScrolledUp() {
@@ -43,28 +54,28 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-  loadMessages() {
+  loadInitialMessages() {
     this.realTimeService.getMessages(0)
       .then((response) => {
         this.messages = response;
-        this.scrollChatToEnd(true);
+        this.scrollChatToBottom(true);
       });
   }
 
-  scrollChatToEnd(force) {
+  scrollChatToBottom(force) {
     setTimeout(() => {
-      const scrollSize = this.messagesElement.nativeElement.scrollHeight;
-      const currentScrollPosition = this.messagesElement.nativeElement.scrollTop;
-      const divSize = this.messagesElement.nativeElement.clientHeight;
-
-      // if it's at the end of chat scroll to show new message
-      if (force || (currentScrollPosition + divSize - scrollSize) > -100) {
-        this.messagesElement.nativeElement.scrollTo(0, scrollSize);
-        this.numberOfUnreadMessages = 0;
-      } else {
-        this.numberOfUnreadMessages += 1;
+      // if it's at the bottom of chat scroll to show new message
+      if (force || this.isChatScrolledToBottom()) {
+        this.messagesElement.nativeElement.scrollTo(0, this.messagesElement.nativeElement.scrollHeight);
       }
     }, 50);
+  }
+
+  isChatScrolledToBottom() {
+    const scrollSize = this.messagesElement.nativeElement.scrollHeight;
+    const currentScrollPosition = this.messagesElement.nativeElement.scrollTop;
+    const divSize = this.messagesElement.nativeElement.clientHeight;
+    return (currentScrollPosition + divSize - scrollSize) > -100;
   }
 
 }

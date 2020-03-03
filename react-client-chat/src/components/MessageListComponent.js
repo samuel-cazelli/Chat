@@ -5,43 +5,68 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import { loadMessagesRequest, changeNumberOfUnreadMessages } from '../redux/actions/MessagesAction';
 
-
-
 class MessageListComponent extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.handleScrollEvent = this.handleScrollEvent.bind(this);
+    }
+
+    componentDidMount() {
+        document.querySelector(".messages").addEventListener('scroll', this.handleScrollEvent)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        
+        const oldMessages = this.props.messagesHistory;
+        const newMessages = nextProps.messagesHistory;
+
+        if (oldMessages.length === 0) { //if it's the first payload of messages should always scroll to bottom
+            this.scrollChatToBottom(true);
+
+        } else if (newMessages.length > oldMessages.length) { //if prop messagesHistory changed
+
+            const lastIdNewMessages = newMessages[newMessages.length - 1].id;
+            const lastIdOldMessages = oldMessages[oldMessages.length - 1].id;
+            const isNewMessage = lastIdNewMessages !== lastIdOldMessages;
+
+            if (isNewMessage) {
+                this.props.dispatch(changeNumberOfUnreadMessages(this.props.numberOfUnreadMessages + 1));
+            }
+
+            this.scrollChatToBottom(false);
+        }
+    }
 
     loadMoreMessages() {
         this.props.dispatch(loadMessagesRequest(this.props.messagesHistory[0].id));
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.messagesHistory.length === 0) {
-            this.scrollChatToEnd(true, true);
-        } else if (nextProps.messagesHistory.length > this.props.messagesHistory.length) {
-       
-            const lastIdNewMessages = Number.parseInt(nextProps.messagesHistory[nextProps.messagesHistory.length - 1].id);
-            const lastIdOldMessages = Number.parseInt(this.props.messagesHistory[this.props.messagesHistory.length - 1].id);
-            const isNewMessage = lastIdNewMessages !== lastIdOldMessages;
-
-            this.scrollChatToEnd(false, isNewMessage);
-        }
-    }
-
-    scrollChatToEnd(force, isNewMessage) {
-        setTimeout(() => {
-            const messagesElement = document.querySelector(".messages");
+    isChatScrolledToBottom() {
+        const messagesElement = document.querySelector(".messages");
+        if (messagesElement) {
             const scrollSize = messagesElement.scrollHeight;
             const currentScrollPosition = messagesElement.scrollTop;
             const divSize = messagesElement.clientHeight;
+            return (currentScrollPosition + divSize - scrollSize) > -100
+        }
+    }
 
+    scrollChatToBottom(force) {
+        setTimeout(() => {
             // if it's at the end of chat scroll to show new message
-            if (force || (currentScrollPosition + divSize - scrollSize) > -100) {
-                messagesElement.scrollTo(0, scrollSize);
-                this.props.dispatch(changeNumberOfUnreadMessages(0));
-                console.log('foi');
-            } else if (isNewMessage) {
-                this.props.dispatch(changeNumberOfUnreadMessages(this.props.numberOfUnreadMessages + 1));
+            if (force || this.isChatScrolledToBottom()) {
+                const messagesElement = document.querySelector(".messages");
+                messagesElement.scrollTo(0, messagesElement.scrollHeight);
             }
         }, 50);
+    }
+
+    handleScrollEvent() {
+        if (this.isChatScrolledToBottom() && this.props.numberOfUnreadMessages !== 0) {
+            this.props.dispatch(changeNumberOfUnreadMessages(0));
+        }
     }
 
     render() {
@@ -52,7 +77,7 @@ class MessageListComponent extends React.Component {
         }
 
         return (
-            <div className='messages'>
+            <div className='messages' onScroll={this.handleScrollEvent()}>
                 <InfiniteScroll
                     pageStart={0}
                     loadMore={this.loadMoreMessages.bind(this)}
@@ -71,7 +96,7 @@ class MessageListComponent extends React.Component {
                 </InfiniteScroll>
                 {(this.props.numberOfUnreadMessages !== 0) ?
                     (
-                        <button className="buttonMoveToBotton btn btn-default" onClick={() => { this.scrollChatToEnd(true, false) }} >
+                        <button className="buttonMoveToBottom btn btn-default" onClick={() => { this.scrollChatToBottom(true) }} >
                             <span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                             <span className="badge badge-pill badge-primary">{this.props.numberOfUnreadMessages}</span>
                         </button>

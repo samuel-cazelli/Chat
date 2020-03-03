@@ -3,14 +3,14 @@
         <div class="panel panel-primary">
             <div>
                 <div class="messages" #messagesElement infiniteScroll [infiniteScrollDistance]="2"
-                    [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolledUp)="handleScrolledUp()">
+                    [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolledUp)="handleScrolledUp()" (scroll)="handleScrolledDown()">
                     <div *ngFor="let message of messages"
                         [ngClass]="{message: true, isMessageMine: message.isMessageMine}">
                         <span class="message-nick">{{message.nick}}</span><br><span
                             class="message-content">{{message.content}}</span>
                     </div>
-                    <button class="buttonMoveToBotton btn btn-default" *ngIf='numberOfUnreadMessages !== 0'
-                        (click)="scrollChatToEnd(true)">
+                    <button class="buttonMoveToBottom btn btn-default" *ngIf='numberOfUnreadMessages !== 0'
+                        (click)="scrollChatToBottom(true)">
                         <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                         <span class="badge badge-pill badge-primary">{{numberOfUnreadMessages}}</span>
                     </button>
