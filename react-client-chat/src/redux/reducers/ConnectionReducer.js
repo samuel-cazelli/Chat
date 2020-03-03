@@ -1,5 +1,5 @@
 import { CONNECTION_REQUEST, CONNECTION_SUCCESS, CONNECTION_ERROR } from '../actions/ConnectionAction';
-import { RealTime } from 'shared-client-chat/index';
+import { RealTime } from 'shared-client-chat/dist/index';
 
 const initialState = {
     realTime: new RealTime(),

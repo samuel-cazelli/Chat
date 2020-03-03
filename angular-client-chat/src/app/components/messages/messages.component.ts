@@ -12,7 +12,7 @@ export class MessagesComponent implements OnInit {
   @ViewChild('messagesElement', { static: true })
   messagesElement: ElementRef;
 
-  messages: { id: BigInteger, content: string, nick: string, date: Date, isMessageMine: boolean }[];
+  messages: { id: number, content: string, nick: string, date: Date, isMessageMine: boolean }[];
 
   numberOfUnreadMessages: number;
 

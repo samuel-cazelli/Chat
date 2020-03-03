@@ -2,7 +2,7 @@
   "name": "shared-client-chat",
   "version": "1.0.0",
   "description": "Shared funcionality for client chat",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
@@ -10,6 +10,8 @@
   "author": "Samuel Cazelli",
   "license": "ISC",
   "dependencies": {
-    "@microsoft/signalr": "^3.1.0"
+    "@microsoft/signalr": "^3.1.0",
+    "@types/node": "^13.7.7",
+    "typescript": "^3.8.3"
   }
 }
