@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, AfterViewChecked  } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, AfterViewChecked } from '@angular/core';
 
 import { RealTimeServiceService } from '../../services/real-time-service.service';
 
@@ -7,7 +7,7 @@ import { RealTimeServiceService } from '../../services/real-time-service.service
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.css']
 })
-export class MessagesComponent implements OnInit, AfterViewChecked  {
+export class MessagesComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('messagesElement', { static: true })
   messagesElement: ElementRef;
@@ -26,15 +26,22 @@ export class MessagesComponent implements OnInit, AfterViewChecked  {
     this.flagShouldScrollChatToBotton = false;
   }
 
+  ngOnInit() {
+
+    this.realTimeService.getMessages(0)
+      .then((response) => {
+        this.messages = response;
+        this.scrollChatToBottom(true);
+      });
+
+    this.realTimeService.subscribeOnNewMessageEvent('MessagesComponent', this.handleOnNewMessage.bind(this));
+  }
+
   ngAfterViewChecked() {
     if (this.flagShouldScrollChatToBotton) {
       this.flagShouldScrollChatToBotton = false;
       this.messagesElement.nativeElement.scrollTo(0, this.messagesElement.nativeElement.scrollHeight);
     }
-  }
-
-  ngOnInit() {
-    this.realTimeService.subscribeOnNewMessageEvent('MessagesComponent', this.handleOnNewMessage.bind(this));
   }
 
   handleOnNewMessage(message) {
@@ -61,14 +68,6 @@ export class MessagesComponent implements OnInit, AfterViewChecked  {
     this.realTimeService.getMessages(this.messages[0].id)
       .then((response) => {
         this.messages = response.concat(this.messages);
-      });
-  }
-
-  loadInitialMessages() {
-    this.realTimeService.getMessages(0)
-      .then((response) => {
-        this.messages = response;
-        this.scrollChatToBottom(true);
       });
   }
 

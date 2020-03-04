@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit  } from '@angular/core';
 
 import { RealTimeServiceService } from './services/real-time-service.service';
 
@@ -13,9 +13,6 @@ import { MessagesComponent } from './components/messages/messages.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-
-  @ViewChild(MessagesComponent, { static: true })
-  messagesElement: MessagesComponent;
 
   isLoggedIn: boolean;
 
@@ -35,7 +32,6 @@ export class AppComponent implements OnInit {
 
   handleLoginSuccess() {
     this.isLoggedIn = true;
-    this.messagesElement.loadInitialMessages();
   }
 
 }

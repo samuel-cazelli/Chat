@@ -1,5 +1,2 @@
-
-<app-login [hidden]='isLoggedIn' [realTimeService]="realTimeService" (onLoginSuccess)="handleLoginSuccess()" ></app-login>
-
-<app-messages #messagesElement [hidden]='!isLoggedIn' [realTimeService]="realTimeService" ></app-messages>
-
+<app-login *ngIf='!isLoggedIn' [realTimeService]="realTimeService" (onLoginSuccess)="handleLoginSuccess()"></app-login>
+<app-messages *ngIf='isLoggedIn' [realTimeService]="realTimeService"></app-messages>
