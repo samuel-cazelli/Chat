@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, AfterViewChecked  } from '@angular/core';
 
 import { RealTimeServiceService } from '../../services/real-time-service.service';
 
@@ -7,7 +7,7 @@ import { RealTimeServiceService } from '../../services/real-time-service.service
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.css']
 })
-export class MessagesComponent implements OnInit {
+export class MessagesComponent implements OnInit, AfterViewChecked  {
 
   @ViewChild('messagesElement', { static: true })
   messagesElement: ElementRef;
@@ -16,11 +16,21 @@ export class MessagesComponent implements OnInit {
 
   numberOfUnreadMessages: number;
 
+  flagShouldScrollChatToBotton: boolean;
+
   @Input()
   realTimeService: RealTimeServiceService;
 
   constructor() {
     this.numberOfUnreadMessages = 0;
+    this.flagShouldScrollChatToBotton = false;
+  }
+
+  ngAfterViewChecked() {
+    if (this.flagShouldScrollChatToBotton) {
+      this.flagShouldScrollChatToBotton = false;
+      this.messagesElement.nativeElement.scrollTo(0, this.messagesElement.nativeElement.scrollHeight);
+    }
   }
 
   ngOnInit() {
@@ -62,13 +72,10 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-  scrollChatToBottom(force) {
-    setTimeout(() => {
-      // if it's at the bottom of chat scroll to show new message
-      if (force || this.isChatScrolledToBottom()) {
-        this.messagesElement.nativeElement.scrollTo(0, this.messagesElement.nativeElement.scrollHeight);
-      }
-    }, 50);
+  scrollChatToBottom(force: boolean) {
+    if (force || this.isChatScrolledToBottom()) {
+      this.flagShouldScrollChatToBotton = true;
+    }
   }
 
   isChatScrolledToBottom() {

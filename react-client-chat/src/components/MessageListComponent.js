@@ -18,7 +18,7 @@ class MessageListComponent extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        
+
         const oldMessages = this.props.messagesHistory;
         const newMessages = nextProps.messagesHistory;
 
@@ -54,13 +54,12 @@ class MessageListComponent extends React.Component {
     }
 
     scrollChatToBottom(force) {
-        setTimeout(() => {
-            // if it's at the end of chat scroll to show new message
+        window.requestAnimationFrame(() => {
             if (force || this.isChatScrolledToBottom()) {
                 const messagesElement = document.querySelector(".messages");
                 messagesElement.scrollTo(0, messagesElement.scrollHeight);
             }
-        }, 50);
+        });
     }
 
     handleScrollEvent() {
