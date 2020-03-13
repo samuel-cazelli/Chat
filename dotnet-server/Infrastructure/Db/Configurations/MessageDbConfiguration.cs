@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChatServer.Infrastructure.Configurations
+namespace ChatServer.Infrastructure.Db.Configurations
 {
-    public class MessageConfiguration : IEntityTypeConfiguration<Message>
+    public class MessageDbConfiguration : IEntityTypeConfiguration<Message>
     {
 
         public void Configure(EntityTypeBuilder<Message> builder)

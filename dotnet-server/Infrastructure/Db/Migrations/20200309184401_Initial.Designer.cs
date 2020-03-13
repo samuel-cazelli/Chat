@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ChatServer.Infrastructure.Migrations
+namespace ChatServer.Infrastructure.Db.Migrations
 {
     [DbContext(typeof(ChatServerDbContext))]
     [Migration("20200309184401_Initial")]

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ChatServer.Infrastructure.Migrations
+namespace ChatServer.Infrastructure.Db.Migrations
 {
     [DbContext(typeof(ChatServerDbContext))]
     partial class ChatServerDbContextModelSnapshot : ModelSnapshot

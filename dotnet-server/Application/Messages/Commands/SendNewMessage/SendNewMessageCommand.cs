@@ -4,7 +4,7 @@ using System.Text;
 using ChatServer.Domain.Entities;
 using MediatR;
 
-namespace ChatServer.Application.Messages.Commands
+namespace ChatServer.Application.Messages.Commands.SendNewMessage
 {
     public class SendNewMessageCommand : IRequest<Message>
     {

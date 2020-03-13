@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ChatServer.Infrastructure.Migrations
+namespace ChatServer.Infrastructure.Db.Migrations
 {
     public partial class Initial : Migration
     {

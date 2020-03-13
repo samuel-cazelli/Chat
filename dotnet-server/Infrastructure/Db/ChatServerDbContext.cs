@@ -1,11 +1,11 @@
-﻿using ChatServer.Application.Shared;
+﻿using ChatServer.Application.Abstractions;
 using ChatServer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChatServer.Infrastructure
+namespace ChatServer.Infrastructure.Db
 {
     public class ChatServerDbContext : DbContext, IChatServerDbContext
     {
