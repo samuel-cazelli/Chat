@@ -7,20 +7,20 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ChatServer.Application.Messages.Commands.SendNewMessage
+namespace ChatServer.Application.Messages.Events.MessageCreated
 {
-    public class NewMessageSentEventHandler : INotificationHandler<NewMessageSentEvent>
+    public class MessageCreatedEventHandler : INotificationHandler<MessageCreatedEvent>
     {
 
         private IRealTimeChatService RealTimeChatService { get; set; }
 
-        public NewMessageSentEventHandler(IRealTimeChatService realTimeService)
+        public MessageCreatedEventHandler(IRealTimeChatService realTimeService)
         {
             this.RealTimeChatService = realTimeService;
         }
 
 
-        public Task Handle(NewMessageSentEvent notification, CancellationToken cancellationToken)
+        public Task Handle(MessageCreatedEvent notification, CancellationToken cancellationToken)
         {
             RealTimeChatService.BroadcastMessage(notification.Message);
 

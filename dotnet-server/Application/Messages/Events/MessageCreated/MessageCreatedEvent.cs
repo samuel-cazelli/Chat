@@ -5,11 +5,11 @@ using System.Text;
 using ChatServer.Domain.Entities;
 using MediatR;
 
-namespace ChatServer.Application.Messages.Commands.SendNewMessage
+namespace ChatServer.Application.Messages.Events.MessageCreated
 {
-    public class NewMessageSentEvent : INotification
+    public class MessageCreatedEvent : INotification
     {
-        public NewMessageSentEvent(Message message)
+        public MessageCreatedEvent(Message message)
         {
             this.Message = message;
         }

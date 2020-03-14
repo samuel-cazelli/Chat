@@ -1,5 +1,5 @@
 ﻿using ChatServer.Application.Abstractions;
-using ChatServer.Application.Messages.Commands.SendNewMessage;
+using ChatServer.Application.Messages.Commands.CreateMessage;
 using ChatServer.Application.Messages.Queries.GetMessages;
 using ChatServer.Domain.Entities;
 using MediatR;
@@ -64,7 +64,7 @@ namespace ChatServer.Infrastructure.RealTimeChat
 
         public void SendMessage(string message, string connectionId)
         {
-            var command = new SendNewMessageCommand(RealTimeChatUsersService.Users[connectionId], message);
+            var command = new CreateMessageCommand(RealTimeChatUsersService.Users[connectionId], message);
 
             this.mediator.Send(command);
         }

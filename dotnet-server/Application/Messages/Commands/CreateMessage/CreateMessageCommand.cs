@@ -4,11 +4,11 @@ using System.Text;
 using ChatServer.Domain.Entities;
 using MediatR;
 
-namespace ChatServer.Application.Messages.Commands.SendNewMessage
+namespace ChatServer.Application.Messages.Commands.CreateMessage
 {
-    public class SendNewMessageCommand : IRequest<Message>
+    public class CreateMessageCommand : IRequest<Message>
     {
-        public SendNewMessageCommand(string nick, string message)
+        public CreateMessageCommand(string nick, string message)
         {
             this.Nick = nick;
             this.Content = message;

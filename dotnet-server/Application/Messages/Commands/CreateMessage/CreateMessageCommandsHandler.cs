@@ -4,14 +4,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ChatServer.Application.Abstractions;
+using ChatServer.Application.Messages.Events.MessageCreated;
 using ChatServer.Domain.Entities;
 using MediatR;
 
 
 
-namespace ChatServer.Application.Messages.Commands.SendNewMessage
+namespace ChatServer.Application.Messages.Commands.CreateMessage
 {
-    class SendNewMessageCommandsHandler : IRequestHandler<SendNewMessageCommand, Message>
+    class CreateMessagesHandler : IRequestHandler<CreateMessageCommand, Message>
     {
 
         private IChatServerDbContext DbContext { get; set; }
@@ -19,13 +20,13 @@ namespace ChatServer.Application.Messages.Commands.SendNewMessage
         private IMediator Mediator { get; set; }
 
 
-        public SendNewMessageCommandsHandler(IChatServerDbContext dbContext, IMediator mediator)
+        public CreateMessagesHandler(IChatServerDbContext dbContext, IMediator mediator)
         {
             this.DbContext = dbContext;
             this.Mediator = mediator;
         }
 
-        public async Task<Message> Handle(SendNewMessageCommand request, CancellationToken cancellationToken)
+        public async Task<Message> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
         {
             var message = new Message
             {
@@ -39,7 +40,7 @@ namespace ChatServer.Application.Messages.Commands.SendNewMessage
 
             insertTask.Wait();
 
-            await Mediator.Publish(new NewMessageSentEvent(message), cancellationToken);
+            await Mediator.Publish(new MessageCreatedEvent(message), cancellationToken);
 
             return message;
         }
