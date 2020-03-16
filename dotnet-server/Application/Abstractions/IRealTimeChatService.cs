@@ -1,4 +1,5 @@
-﻿using ChatServer.Domain.Entities;
+﻿using ChatServer.Application.Messages.Dto;
+using ChatServer.Domain.Entities;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace ChatServer.Application.Abstractions
 
         void SendMessage(string message, string connectionId);
 
-        List<Message> GetMessages(Int32 startId = 0);
+        List<MessageDto> GetMessages(Int32 startId, string connectionId);
 
         void BroadcastMessage(Message message);
 

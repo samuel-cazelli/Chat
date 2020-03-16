@@ -1,4 +1,5 @@
 ﻿using ChatServer.Application.Abstractions;
+using ChatServer.Application.Messages.Dto;
 using ChatServer.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -36,9 +37,9 @@ namespace ChatServer.Infrastructure.RealTimeChat
             RealTimeChatService.SendMessage(message, Context.ConnectionId);
         }
 
-        public List<Message> GetMessages(Int32 startId = 0)
+        public List<MessageDto> GetMessages(Int32 startId = 0)
         {
-            return RealTimeChatService.GetMessages(startId);
+            return RealTimeChatService.GetMessages(startId, Context.ConnectionId);
         }
 
         public KeyValuePair<bool, string> LogIn(string nick)

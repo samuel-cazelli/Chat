@@ -1,5 +1,6 @@
 ﻿using ChatServer.Application.Abstractions;
 using ChatServer.Application.Messages.Commands.CreateMessage;
+using ChatServer.Application.Messages.Dto;
 using ChatServer.Application.Messages.Queries.GetMessages;
 using ChatServer.Domain.Entities;
 using MediatR;
@@ -19,10 +20,10 @@ namespace ChatServer.Infrastructure.RealTimeChat
         private IHubContext<RealTimeChatHub> ChatHubContext { get; set; }
 
         private IMediator mediator { get; set; }
-        
+
         private RealTimeChatUsersService RealTimeChatUsersService { get; set; }
 
-        
+
         public RealTimeChatService(IHubContext<RealTimeChatHub> chatHubContext, IMediator mediator, RealTimeChatUsersService realTimeChatUsersService)
         {
             this.RealTimeChatUsersService = realTimeChatUsersService;
@@ -33,7 +34,7 @@ namespace ChatServer.Infrastructure.RealTimeChat
 
         public void OnConnect()
         {
-            
+
         }
 
         public void OnDisconnected(string connectionId)
@@ -69,17 +70,39 @@ namespace ChatServer.Infrastructure.RealTimeChat
             this.mediator.Send(command);
         }
 
-        public List<Message> GetMessages(Int32 startId = 0)
+        public List<MessageDto> GetMessages(Int32 startId, string connectionId)
         {
+
+            var currentUserNick = string.Empty;
+
+            RealTimeChatUsersService.Users.TryGetValue(connectionId, out currentUserNick);
+            
             var query = new GetMessagesQuery(startId);
 
-            return this.mediator.Send(query).Result;
+            var messages = this.mediator.Send(query).Result;
+
+            var messagesDto = messages.Select((m) => new MessageDto(m.Id, m.Nick, m.Content, currentUserNick == m.Nick));
+
+            return messagesDto.ToList();
 
         }
 
         public void BroadcastMessage(Message message)
         {
-            ChatHubContext.Clients.All.SendAsync("NewMessage", message);
+            var currentUser = RealTimeChatUsersService.Users.Where(u => u.Value == message.Nick);
+
+            var messageDto_ToUserWhoSentMessage = new MessageDto(message.Id, message.Nick, message.Content, true);
+
+            if (currentUser.Any())
+            {
+                ChatHubContext.Clients.Client(currentUser.First().Key).SendAsync("NewMessage", messageDto_ToUserWhoSentMessage);
+            }
+
+            var messageDto_ToAllUsersExpetWhoSentMessage = new MessageDto(message.Id, message.Nick, message.Content, false);
+
+            ChatHubContext.Clients.AllExcept(currentUser.First().Key).SendAsync("NewMessage", messageDto_ToAllUsersExpetWhoSentMessage);
+
+
         }
     }
 }
