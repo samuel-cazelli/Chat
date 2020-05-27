@@ -19,9 +19,9 @@
             <div class="panel-footer">
                 <div class="input-group">
                     <input type="text" class="form-control" value="hello world" name="message" #message
-                        (keyup.enter)="handleClickSendMessage(message.value)" />
+                        (keyup.enter)="handleClickSendMessage(message.value); message.value = '';" />
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" (click)="handleClickSendMessage(message.value)">
+                        <button class="btn btn-default" type="button" (click)="handleClickSendMessage(message.value); message.value = '';" placeholder="Message">
                             <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
                         </button>
                     </span>

@@ -13,6 +13,7 @@ class MessageFormComponent extends React.Component {
     handleSubmitMessage(event) {
         event.preventDefault();
         this.props.dispatch(sendMessage(this.refs.message.value));
+        this.refs.message.value = '';
     }
 
     render() {
