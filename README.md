@@ -2,7 +2,7 @@
 
 ## Server Side
 
-To developed the server side code I used the following technologies:
+The server side code was made with the following technologies:
 
 * ASP.NET Core
 * SignalR
@@ -12,12 +12,14 @@ To developed the server side code I used the following technologies:
 
 ## Client Side
 
-The chat client's were developed in Angular and ReactJS. Also used the following technologies:
+It was developed two different clients one with Angular and another with React JS.
 
+Also used the following technologies:
+
+* SignalR client
+* Bootstrap
 * TypeScript
 * Redux
-* Bootstrap
-* SignalR client
 
-
+### Sample
 <img src='https://github.com/Cazelli/Chat/blob/master/print-clients.png' />
